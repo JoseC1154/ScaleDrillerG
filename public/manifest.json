@@ -1,0 +1,39 @@
+{
+  "name": "Scale Driller - Music Theory Trainer",
+  "short_name": "Scale Driller",
+  "description": "Your personal music theory trainer for guitar and bass",
+  "start_url": "/ScaleDrillerG/",
+  "display": "standalone",
+  "background_color": "#1c1917",
+  "theme_color": "#f97316",
+  "orientation": "any",
+  "categories": ["music", "education", "entertainment"],
+  "icons": [
+    {
+      "src": "/ScaleDrillerG/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/ScaleDrillerG/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/ScaleDrillerG/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/ScaleDrillerG/screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

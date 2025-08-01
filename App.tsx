@@ -11,6 +11,8 @@ const App: React.FC = () => {
   const [appState, setAppState] = useState<AppState>('settings');
   const [quizSettings, setQuizSettings] = useState<QuizSettingsType>(DEFAULT_QUIZ_SETTINGS);
   const [isFullScreen, setIsFullScreen] = useState(!!document.fullscreenElement);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
   const handleStartQuiz = useCallback((settings: QuizSettingsType) => {
     setQuizSettings(settings);
@@ -38,12 +40,36 @@ const App: React.FC = () => {
     }
   }, []);
 
+  const handleInstallClick = useCallback(() => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult: any) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        }
+        setDeferredPrompt(null);
+        setShowInstallPrompt(false);
+      });
+    }
+  }, [deferredPrompt]);
+
   useEffect(() => {
     const onFullScreenChange = () => {
       setIsFullScreen(!!document.fullscreenElement);
     };
     document.addEventListener('fullscreenchange', onFullScreenChange);
     return () => document.removeEventListener('fullscreenchange', onFullScreenChange);
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallPrompt(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
   }, []);
 
 
@@ -61,7 +87,23 @@ const App: React.FC = () => {
 
   return (
     <div className="text-stone-100 min-h-screen flex flex-col items-center justify-center p-4 relative">
-       <button
+      {/* Install PWA Button */}
+      {showInstallPrompt && (
+        <button
+          onClick={handleInstallClick}
+          className="absolute top-4 left-4 p-2 rounded-full bg-orange-500 hover:bg-orange-600 text-white transition-colors z-50 flex items-center gap-2"
+          title="Install Scale Driller"
+          aria-label="Install Scale Driller as an app"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          <span className="hidden sm:inline">Install</span>
+        </button>
+      )}
+
+      {/* Fullscreen Button */}
+      <button
         onClick={handleFullScreenToggle}
         className="absolute top-4 right-4 p-2 rounded-full bg-stone-900/60 hover:bg-stone-800/80 text-stone-200 transition-colors z-50"
         title={isFullScreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
