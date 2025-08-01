@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background-image: url('/background.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Simple scrollbar styling for a more cohesive look */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #292524; /* stone-800 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f97316; /* orange-500 */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #fb923c; /* orange-400 */
+}
+
+@keyframes float-up-fade {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+}
+
+.animate-float-up {
+  animation: float-up-fade 1.5s ease-out forwards;
+}
+
+@keyframes level-up-pulse {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 5px rgba(255, 165, 0, 0.5);
+  }
+  50% {
+    transform: scale(1.15);
+    text-shadow: 0 0 20px rgba(255, 255, 100, 1), 0 0 35px rgba(255, 165, 0, 1);
+  }
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 5px rgba(255, 165, 0, 0.5);
+  }
+}
+
+.animate-level-up {
+  animation: level-up-pulse 1.5s ease-in-out;
+}
