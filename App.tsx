@@ -14,10 +14,18 @@ const App: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
-  const handleStartQuiz = useCallback((settings: QuizSettingsType) => {
-    setQuizSettings(settings);
-    setAppState('quiz');
+  const handleSettingChange = useCallback(<K extends keyof QuizSettingsType>(key: K, value: QuizSettingsType[K]) => {
+    setQuizSettings(prev => ({ ...prev, [key]: value }));
   }, []);
+
+  const handleStartQuiz = useCallback(() => {
+    console.log('handleStartQuiz called with current settings:', quizSettings);
+    if (!quizSettings || !quizSettings.modeCategory) {
+      console.error('Invalid settings when starting quiz:', quizSettings);
+      return;
+    }
+    setAppState('quiz');
+  }, [quizSettings]);
 
   const handleStartInputTester = useCallback((settings: QuizSettingsType) => {
     setQuizSettings(settings);
@@ -81,7 +89,11 @@ const App: React.FC = () => {
         return <InputTester settings={quizSettings} onQuit={handleQuit} />;
       case 'settings':
       default:
-        return <Settings onStartQuiz={handleStartQuiz} onStartInputTester={handleStartInputTester} />;
+        return <Settings 
+          settings={quizSettings}
+          onSettingChange={handleSettingChange}
+          onStartQuiz={handleStartQuiz} 
+        />;
     }
   };
 

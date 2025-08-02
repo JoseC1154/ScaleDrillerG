@@ -18,6 +18,19 @@ const BPM_QUESTION_TIME = 7;
 const BPM_LEVEL_UP_THRESHOLD = 30;
 
 const Quiz: React.FC<QuizProps> = ({ settings, onQuit }) => {
+  // Safety check for settings
+  if (!settings || !settings.modeCategory) {
+    console.error('Quiz component received invalid settings:', settings);
+    return (
+      <div className="text-center text-red-400">
+        <p>Error: Invalid quiz settings</p>
+        <button onClick={onQuit} className="mt-4 px-4 py-2 bg-stone-700 hover:bg-stone-600 rounded">
+          Back to Settings
+        </button>
+      </div>
+    );
+  }
+
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
