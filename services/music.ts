@@ -30,17 +30,21 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 };
 
 export const generateQuizQuestions = (
-  settings: Pick<QuizSettings, 'key' | 'scaleType' | 'quizMode' | 'practiceKeys'>,
+  settings: Pick<QuizSettings, 'key' | 'scaleType' | 'quizMode' | 'practiceKeys' | 'practiceDegrees'>,
   count: number
 ): Question[] => {
-  const { key, scaleType, quizMode, practiceKeys } = settings;
+  const { key, scaleType, quizMode, practiceKeys, practiceDegrees } = settings;
   const questions: Question[] = [];
-  const degrees = Array.from({ length: 7 }, (_, i) => i + 1);
+  
+  const degreesToPractice = 
+    (quizMode === 'Degree Training' && practiceDegrees && practiceDegrees.length > 0)
+    ? practiceDegrees
+    : Array.from({ length: 7 }, (_, i) => i + 1);
 
   for (let i = 0; i < count; i++) {
     let questionKey: MusicKey;
 
-    if (quizMode === 'Practice' || quizMode === 'Nashville Numbers') {
+    if (quizMode === 'Practice' || quizMode === 'Nashville Numbers' || quizMode === 'Degree Training') {
       const keysToUse = practiceKeys && practiceKeys.length > 0 ? practiceKeys : [MUSIC_KEYS[0]]; // Fallback
       questionKey = keysToUse[Math.floor(Math.random() * keysToUse.length)];
     } else { // Time Attack or BPM Challenge
@@ -52,7 +56,7 @@ export const generateQuizQuestions = (
     }
     
     const scale = getScale(questionKey, scaleType);
-    const degree = degrees[Math.floor(Math.random() * degrees.length)];
+    const degree = degreesToPractice[Math.floor(Math.random() * degreesToPractice.length)];
     const correctAnswer = scale.notes[degree - 1];
 
     let promptText: string;

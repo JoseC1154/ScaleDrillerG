@@ -29,7 +29,7 @@ const InputTester: React.FC<InputTesterProps> = ({ settings, onQuit }) => {
         return <Piano onNotePlayed={handleNotePlayed} highlightedNotes={highlightedNotes} />;
       case 'Guitar':
       case 'Bass':
-        return <Fretboard instrument={settings.instrument} onNotePlayed={handleNotePlayed} highlightedNotes={highlightedNotes} handedness={settings.handedness} />;
+        return <Fretboard instrument={settings.instrument} onNotePlayed={handleNotePlayed} highlightedNotes={highlightedNotes} handedness={settings.handedness} labelMode="notes" scale={null} />;
       default:
         return null;
     }

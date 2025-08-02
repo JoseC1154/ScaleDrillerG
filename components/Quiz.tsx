@@ -12,6 +12,8 @@ interface QuizProps {
   onQuit: () => void;
 }
 
+type InstrumentLabelMode = 'notes' | 'degrees';
+
 const BPM_QUESTION_TIME = 7;
 const BPM_LEVEL_UP_THRESHOLD = 30;
 
@@ -24,6 +26,7 @@ const Quiz: React.FC<QuizProps> = ({ settings, onQuit }) => {
   const [lastPlayedNote, setLastPlayedNote] = useState<Note | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const [scoreChange, setScoreChange] = useState<{ value: number, id: number } | null>(null);
+  const [instrumentLabelMode, setInstrumentLabelMode] = useState<InstrumentLabelMode>('notes');
   
   // Time Attack State
   const [timer, setTimer] = useState(settings.timeAttackDuration);
@@ -258,6 +261,8 @@ const Quiz: React.FC<QuizProps> = ({ settings, onQuit }) => {
       highlightedNotes: (showHelp && scale) ? scale.notes : [],
       correctNote,
       incorrectNote,
+      labelMode: instrumentLabelMode,
+      scale,
     };
     
     switch (settings.instrument) {
@@ -370,6 +375,19 @@ const Quiz: React.FC<QuizProps> = ({ settings, onQuit }) => {
         <div className="flex gap-2">
             <button onClick={() => setShowHelp(true)} title="Help" className="bg-orange-600 hover:bg-orange-700 text-white p-2 rounded-full">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" /></svg>
+            </button>
+            <button
+                onClick={() => setInstrumentLabelMode(p => p === 'notes' ? 'degrees' : 'notes')}
+                title="Toggle Note/Degree Labels"
+                className={`p-2 rounded-full transition-colors ${
+                    instrumentLabelMode === 'degrees' 
+                    ? 'bg-orange-500 text-white' 
+                    : 'bg-stone-600 hover:bg-stone-500 text-stone-200'
+                }`}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 20l4-16m2 16l4-16M6 9h12M6 15h12" />
+                </svg>
             </button>
             <button onClick={onQuit} title="Quit" className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>

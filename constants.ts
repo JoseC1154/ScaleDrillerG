@@ -52,6 +52,7 @@ export const NASHVILLE_DEGREE_NAMES: {
 };
 
 export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
+  modeCategory: 'Single Note',
   key: 'C',
   scaleType: 'Major',
   quizMode: 'Practice',
@@ -61,6 +62,7 @@ export const DEFAULT_QUIZ_SETTINGS: QuizSettings = {
   bpm: 100,
   questionCount: 20,
   practiceKeys: ['C'],
+  practiceDegrees: [1, 2, 3, 4, 5, 6, 7],
   timeAttackDuration: 60,
   secondsPerQuestion: 8,
 };

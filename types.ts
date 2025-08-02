@@ -3,12 +3,14 @@ export type Note = 'C' | 'Db' | 'D' | 'Eb' | 'E' | 'F' | 'F#' | 'G' | 'Ab' | 'A'
 export type MusicKey = 'C' | 'G' | 'D' | 'A' | 'E' | 'B' | 'F#' | 'Db' | 'Ab' | 'Eb' | 'Bb' | 'F';
 export type Key = MusicKey | 'Random';
 export type ScaleType = 'Major' | 'Minor';
-export type QuizMode = 'Practice' | 'Time Attack' | 'BPM Challenge' | 'Nashville Numbers';
+export type QuizMode = 'Practice' | 'Time Attack' | 'BPM Challenge' | 'Nashville Numbers' | 'Degree Training';
 export type InputMethod = 'Virtual Instrument' | 'MIDI' | 'Audio';
 export type Instrument = 'Piano' | 'Guitar' | 'Bass';
 export type Handedness = 'Right' | 'Left';
+export type ModeCategory = 'Single Note' | 'Multi Note';
 
 export interface QuizSettings {
+  modeCategory: ModeCategory;
   key: Key;
   scaleType: ScaleType;
   quizMode: QuizMode;
@@ -18,6 +20,7 @@ export interface QuizSettings {
   bpm: number; // for BPM Challenge
   questionCount: number; 
   practiceKeys: MusicKey[]; // For Practice mode
+  practiceDegrees: number[]; // For Degree Training mode
   timeAttackDuration: number; // for Time Attack
   secondsPerQuestion: number; // for Time Attack
 }

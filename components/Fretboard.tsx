@@ -1,5 +1,5 @@
 import React from 'react';
-import { Note, Handedness } from '../types';
+import { Note, Handedness, Scale } from '../types';
 import { getFretboardNotes } from '../services/music';
 import { GUITAR_TUNING, BASS_TUNING } from '../constants';
 
@@ -11,9 +11,11 @@ interface FretProps {
     isIncorrect: boolean;
     onClick: (note: Note) => void;
     showInlay: boolean;
+    labelMode: 'notes' | 'degrees';
+    scale: Scale | null;
 }
 
-const Fret: React.FC<FretProps> = ({ note, fretNum, isHighlighted, isCorrect, isIncorrect, onClick, showInlay }) => {
+const Fret: React.FC<FretProps> = ({ note, fretNum, isHighlighted, isCorrect, isIncorrect, onClick, showInlay, labelMode, scale }) => {
     const isDoubleMarkerFret = fretNum === 12;
 
     const baseClasses = 'w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-150 z-10';
@@ -25,6 +27,14 @@ const Fret: React.FC<FretProps> = ({ note, fretNum, isHighlighted, isCorrect, is
         stateClasses = '!bg-red-500 !text-black ring-2 ring-white transform scale-105';
     } else if (isHighlighted) {
         stateClasses = '!bg-orange-400 !text-black shadow-lg transform scale-105';
+    }
+
+    let displayLabel: string = note;
+    if (labelMode === 'degrees' && scale) {
+        const degreeIndex = scale.notes.indexOf(note);
+        if (degreeIndex !== -1) {
+            displayLabel = (degreeIndex + 1).toString();
+        }
     }
 
     return (
@@ -46,7 +56,7 @@ const Fret: React.FC<FretProps> = ({ note, fretNum, isHighlighted, isCorrect, is
                 aria-label={`Play note ${note}`}
                 className={`${baseClasses} ${stateClasses}`}
             >
-                {note}
+                {displayLabel}
             </button>
         </div>
     );
@@ -60,9 +70,11 @@ interface FretboardProps {
   correctNote?: Note | null;
   incorrectNote?: Note | null;
   handedness: Handedness;
+  labelMode: 'notes' | 'degrees';
+  scale: Scale | null;
 }
 
-const Fretboard: React.FC<FretboardProps> = ({ instrument, onNotePlayed, highlightedNotes = [], correctNote = null, incorrectNote = null, handedness }) => {
+const Fretboard: React.FC<FretboardProps> = ({ instrument, onNotePlayed, highlightedNotes = [], correctNote = null, incorrectNote = null, handedness, labelMode, scale }) => {
   const tuning = instrument === 'Guitar' ? GUITAR_TUNING : BASS_TUNING;
   const fretCount = 12;
   const allNotes = getFretboardNotes(tuning, fretCount);
@@ -89,6 +101,14 @@ const Fretboard: React.FC<FretboardProps> = ({ instrument, onNotePlayed, highlig
                         } else if (highlightedNotes.includes(openNote)) {
                             stateOpenStringClasses = '!bg-orange-400 !text-black shadow-lg transform scale-105';
                         }
+                        
+                        let openStringLabel: string = openNote;
+                        if (labelMode === 'degrees' && scale) {
+                            const degreeIndex = scale.notes.indexOf(openNote);
+                            if (degreeIndex !== -1) {
+                                openStringLabel = (degreeIndex + 1).toString();
+                            }
+                        }
 
                         return (
                         <div key={stringIndex} className={`relative flex items-center h-10 sm:h-12 ${handedness === 'Left' ? 'flex-row-reverse' : ''}`}>
@@ -103,7 +123,7 @@ const Fretboard: React.FC<FretboardProps> = ({ instrument, onNotePlayed, highlig
                                     aria-label={`Play open string ${openNote}`}
                                     className={`${baseOpenStringClasses} ${stateOpenStringClasses}`}
                                 >
-                                    {openNote}
+                                    {openStringLabel}
                                 </button>
                             </div>
 
@@ -123,6 +143,8 @@ const Fretboard: React.FC<FretboardProps> = ({ instrument, onNotePlayed, highlig
                                                 isIncorrect={incorrectNote === noteInfo.note}
                                                 onClick={onNotePlayed}
                                                 showInlay={stringIndex === inlayStringIndex && fretMarkers.includes(fretNum)}
+                                                labelMode={labelMode}
+                                                scale={scale}
                                             />
                                             <div className="absolute top-0 h-full w-0.5 bg-gradient-to-b from-gray-400 via-gray-300 to-gray-400 z-0" style={handedness === 'Right' ? { right: 0 } : { left: 0 }}></div>
                                         </div>
