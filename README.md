@@ -13,6 +13,8 @@ A Progressive Web App for practicing musical scales and theory.
 ## Live App
 Visit: https://JoseC1154.github.io/ScaleDrillerG/
 
+*Last updated: August 6, 2025*
+
 ## Run Locally
 
 **Prerequisites:**  Node.js
