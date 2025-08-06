@@ -33,7 +33,11 @@ jobs:
       run: npm ci
       
     - name: Build
-      run: npm run build
+      run: |
+        npm run build
+        cp manifest.json dist/
+        cp service-worker.js dist/
+        cp -r public/* dist/ 2>/dev/null || true
       
     - name: Setup Pages
       uses: actions/configure-pages@v4

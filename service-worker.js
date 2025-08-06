@@ -1,9 +1,10 @@
 
-const CACHE_NAME = 'scale-driller-v5';
+const CACHE_NAME = 'scale-driller-v6';
+const BASE_PATH = '/ScaleDrillerG/';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
+  BASE_PATH,
+  BASE_PATH + 'index.html',
+  BASE_PATH + 'manifest.json',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap',
 ];
