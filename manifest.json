@@ -1,7 +1,7 @@
 {
-  "name": "Scale Driller",
-  "short_name": "ScaleDriller",
-  "description": "Your personal music theory trainer.",
+  "name": "Scale Driller - Music Theory Trainer",
+  "short_name": "Scale Driller",
+  "description": "Your personal music theory trainer. Practice scales, chords, and musical theory with interactive exercises.",
   "icons": [
     {
       "src": "./icon-192x192.svg",
@@ -11,22 +11,31 @@
     },
     {
       "src": "./icon-512x512.svg",
-      "sizes": "512x512",
+      "sizes": "512x512", 
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
       "src": "./icon-512x512.svg",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/svg+xml", 
       "purpose": "maskable"
+    },
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "start_url": "/ScaleDrillerG/",
   "display": "standalone",
   "background_color": "#292524",
   "theme_color": "#f97316",
-  "orientation": "portrait",
+  "orientation": "any",
   "scope": "/ScaleDrillerG/",
-  "categories": ["music", "education", "productivity"]
+  "categories": ["music", "education", "productivity"],
+  "lang": "en",
+  "dir": "ltr",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"]
 }

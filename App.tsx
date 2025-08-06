@@ -25,10 +25,45 @@ const App: React.FC = () => {
   const [activeView, setActiveView] = useState<ActiveView>('drill');
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isDevModeUnlocked, setIsDevModeUnlocked] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
 
   useEffect(() => {
     setUserData(loadUserData());
+    
+    // PWA Install prompt handling
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallButton(true);
+    };
+
+    const handleAppInstalled = () => {
+      setShowInstallButton(false);
+      setDeferredPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
   }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    if (outcome === 'accepted') {
+      setShowInstallButton(false);
+    }
+    
+    setDeferredPrompt(null);
+  };
 
   const handleSettingChange = useCallback(<K extends keyof QuizSettingsType>(key: K, value: QuizSettingsType[K]) => {
     setSettings(prev => ({ ...prev, [key]: value }));
@@ -193,6 +228,18 @@ const App: React.FC = () => {
               <InstrumentSelector settings={settings} onSettingChange={handleSettingChange} />
           </div>
           <div className="flex items-center gap-2 z-10">
+              {showInstallButton && (
+                <button
+                  onClick={handleInstallClick}
+                  className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+                  title="Install App"
+                  aria-label="Install Scale Driller App"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                  </svg>
+                </button>
+              )}
               <button
               onClick={() => setIsGlobalSettingsOpen(true)}
               className="p-2 rounded-full bg-stone-900/60 hover:bg-stone-800/80 text-stone-200 transition-colors"
