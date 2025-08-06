@@ -38,8 +38,6 @@ jobs:
         cp manifest.json dist/
         cp service-worker.js dist/
         cp public/*.svg dist/ 2>/dev/null || true
-      env:
-        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || '' }}
         
     - name: Setup Pages
       uses: actions/configure-pages@v4
